@@ -1,0 +1,6 @@
+{
+    "git.scanRepositories": [
+        "C:\\Program Files\\Git\\bin",
+        "C:\\Program Files\\Git\\cmd"
+    ]
+}
