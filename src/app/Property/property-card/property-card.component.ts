@@ -1,22 +1,28 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+// import { IpcSocketConnectOpts } from 'net';
+import { IProperty } from '../../model/IProperty';
 
 @Component({
   selector: 'app-property-card',
   templateUrl: './property-card.component.html',
-  styleUrls: ['./property-card.component.css']
+  styleUrls: ['./property-card.component.css'],
 })
 export class PropertyCardComponent implements OnInit {
+  constructor() {}
+@Input() property:IProperty;
+@Input() hideIcons:boolean;
+  ngOnInit() {}
 
-  constructor() { }
+  // Property: IProperty =
+  //   {
+  //     Id: 1,
+  //     PType: 't1',
+  //     Price: 10000,
+  //     Name: 'Home',
+  //     Sellrent:1,
+  //     BHK:null,RTM:null,BuiltArea:null,City:'',Description:'', FType:''
 
-  ngOnInit() {
-  }
 
-  Property:any={
-    id:"1",
-    type:"t1",
-    price:"10000",
-    name:"Home"
-  }
-
+  //   }
+  // ;
 }
