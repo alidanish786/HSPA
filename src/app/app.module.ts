@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule,NO_ERRORS_SCHEMA } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TabsModule } from 'ngx-bootstrap/tabs';
@@ -41,12 +41,13 @@ const appRoute:Routes=[
     BrowserModule,HttpClientModule,FormsModule,ReactiveFormsModule,
     BrowserAnimationsModule,FormsModule,
     BsDropdownModule.forRoot(),
-    RouterModule.forRoot(appRoute),
+    RouterModule.forRoot(appRoute),TabsModule,
     TabsModule.forRoot(),
     BsDatepickerModule.forRoot(),
     ButtonsModule.forRoot()
   ],
   providers: [HousingService,UserServiceService,AlertifyService,AuthService],
   bootstrap: [AppComponent]
+
 })
 export class AppModule { }

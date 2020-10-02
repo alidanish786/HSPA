@@ -1,27 +1,74 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
-import { IProperty } from '../model/IProperty';
+import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 import { Observable } from 'rxjs';
+import { IProperty } from '../model/IProperty';
+import { IPropertyBase } from '../model/IPropertyBase';
+import { Property } from '../model/Property';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class HousingService {
-  constructor(private http: HttpClient) {}
 
-  getAllProperties(sellRent: number): Observable<IProperty[]> {
-    return this.http.get('assets/data/data.json').pipe(
-      map((data) => {
-        const propArray: Array<IProperty> = [];
-        for (const Id in data) {
-          if (data.hasOwnProperty(Id) && data[Id].SellRent===sellRent) {
-            propArray.push(data[Id]);
-            // console.log(id)
+  constructor(private http: HttpClient) { }
+
+  getAllProperties(SellRent?: number): Observable<IPropertyBase[]> {
+    debugger
+    return this.http.get('data/properties.json').pipe(
+      map(data => {
+      const propertiesArray: Array<IPropertyBase> = [];
+      const localProperties = JSON.parse(localStorage.getItem('newProp'));
+
+      if (localProperties) {
+        for (const id in localProperties) {
+          if (localProperties.hasOwnProperty(id) && localProperties[id].SellRent === SellRent) {
+            propertiesArray.push(localProperties[id]);
           }
         }
-        return propArray;
+      }
+
+      for (const id in data) {
+        if (data.hasOwnProperty(id) && data[id].SellRent === SellRent) {
+          propertiesArray.push(data[id]);
+        }
+      }
+      return propertiesArray;
+      })
+    );
+
+    return this.http.get<IProperty[]>('data/properties.json');
+  }
+  addProperty(property: Property) {
+    let newProp = [property];
+
+    // Add new property in array if newProp alreay exists in local storage
+    if (localStorage.getItem('newProp')) {
+      newProp = [property,
+                  ...JSON.parse(localStorage.getItem('newProp'))];
+    }
+
+    localStorage.setItem('newProp', JSON.stringify(newProp));
+  }
+
+  newPropID() {
+    if (localStorage.getItem('PID')) {
+      localStorage.setItem('PID', String(+localStorage.getItem('PID') + 1));
+      return +localStorage.getItem('PID');
+    } else {
+      localStorage.setItem('PID', '101');
+      return 101;
+    }
+  }
+
+  getProperty(id: number) {
+    return this.getAllProperties().pipe(
+      map(propertiesArray => {
+        return propertiesArray.find(p => p.Id === id);
       })
     );
   }
+
+
 }

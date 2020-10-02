@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {HousingService} from '../../Services/housing.service';
 import { IProperty } from '../../model/IProperty';
+import { IPropertyBase } from 'src/app/model/IPropertyBase';
 
 
 @Component({
@@ -10,53 +11,24 @@ import { IProperty } from '../../model/IProperty';
   styleUrls: ['./property-list.component.css']
 })
 export class PropertyListComponent implements OnInit {
+  SellRent = 1;
+  properties: IPropertyBase[];
 
-  constructor(private housingService:HousingService,private route:ActivatedRoute,private router:Router) { }
-  sellRent:number=1;
-  ngOnInit() {
-      let url=this.router.url;
-      if(url!="/"){
-        this.sellRent=2;
+  constructor(private route: ActivatedRoute, private housingService: HousingService) { }
+
+  ngOnInit(): void {
+    if (this.route.snapshot.url.toString()) {
+      this.SellRent = 2; // Means we are on rent-property URL else we are on base URL
+    }
+    this.housingService.getAllProperties(this.SellRent).subscribe(
+        data => {
+        this.properties = data;
+        console.log(data);
+      }, error => {
+        console.log('httperror:');
+        console.log(error);
       }
-
-    this.housingService.getAllProperties(this.sellRent).subscribe(data=>{
-      this.properties=data
-    },error=>{console.log(error)})
+    );
   }
 
-properties:Array<IProperty>;
-  // properties: Array<any> = [
-  //   {
-  //     id: '1',
-  //     type: 't1',
-  //     price: '10000',
-  //     name: 'Home',
-  //   },
-  //   {
-  //     id: '2',
-  //     type: 't1',
-  //     price: '10000',
-  //     name: 'Home',
-  //   }, {
-  //     id: '3',
-  //     type: 't1',
-  //     price: '10000',
-  //     name: 'Home',
-  //   }, {
-  //     id: '4',
-  //     type: 't1',
-  //     price: '10000',
-  //     name: 'Home',
-  //   }, {
-  //     id: '5',
-  //     type: 't1',
-  //     price: '10000',
-  //     name: 'Home',
-  //   }, {
-  //     id: '6',
-  //     type: 't1',
-  //     price: '10000',
-  //     name: 'Home',
-  //   },
-  // ];
 }
