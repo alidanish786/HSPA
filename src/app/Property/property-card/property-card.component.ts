@@ -11,7 +11,9 @@ export class PropertyCardComponent implements OnInit {
   constructor() {}
 @Input() property:IProperty;
 @Input() hideIcons:boolean;
-  ngOnInit() {}
+  ngOnInit() {
+    console.log(this.property)
+  }
 
   // Property: IProperty =
   //   {
